@@ -2,11 +2,9 @@ package com.example.shoppingmall.user;
 
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,15 +24,15 @@ public class UserRepository {
     private Map<String, User> userTable = new HashMap<>();
 
     @Transactional
-    public String save(User user) {
+    public void save(User user) {
         entityManager.persist(user);
 
-        User savedUser = entityManager.find(User.class, user.getId());
+//        User savedUser = entityManager.find(User.class, user.getId());
 
 //        userTable.put(user.getUserId(), user);
 //
 //        User savedUser = userTable.get(user.getUserId());
-        return savedUser.getUserId();
+//        return savedUser.getUserId();
     }
 
     public String check(String userId) {
@@ -44,7 +42,18 @@ public class UserRepository {
         return "ok";
     }
 
-    public User findById(String userId) {
-        return userTable.get(userId);
+    public User findByUserId(String userId) {
+//        return userTable.get(userId);
+        return entityManager.find(User.class, userId);
+    }
+
+    public User findById(int id) {
+        return entityManager.find(User.class, id);
+    }
+
+    public int login(User user) {
+        User loginUser = entityManager.find(User.class, user);
+        if (loginUser == null) return 0;
+        else return loginUser.getId();
     }
 }

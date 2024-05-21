@@ -62,7 +62,10 @@ public class UserController {
 
     @PostMapping("/login")
     public ApiUtils.ApiResult login(@Valid @RequestBody UserDTO userDTO) {
-        
+
+        User requestUser = userDTO.convertToEntity();
+        int userId = userService.login(requestUser);
+        return success(userId);
     }
 //    @PostMapping("/join")
 //    public ResponseEntity<String> join(@RequestBody User user) {

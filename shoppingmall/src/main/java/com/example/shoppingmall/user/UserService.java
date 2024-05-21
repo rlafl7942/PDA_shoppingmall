@@ -9,7 +9,9 @@ public class UserService {
     UserRepository userRepository;
 
     public String join(User user) {
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        return "";
     }
 
     public String check(String userId) {
@@ -17,11 +19,15 @@ public class UserService {
     }
 
     public boolean checkDuplicateId(String userId) {
-        User existUser = userRepository.findById(userId);
+        User existUser = userRepository.findByUserId(userId);
         if (existUser == null)
             return false;
         else
             return true;
+    }
+
+    public int login(User user) {
+        return userRepository.login(user);
     }
 
 //    public void makeConnection() {
