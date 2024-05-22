@@ -11,8 +11,8 @@ import lombok.Setter;
 //@ToString
 //@AllArgsConstructor
 public class User {
-    @Id
-    private int id;
+    @Id // JPA 식별자
+    private int id; // PK
     private String userId;
     private String pw;
     private String name;

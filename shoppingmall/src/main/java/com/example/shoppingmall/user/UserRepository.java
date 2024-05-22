@@ -1,6 +1,7 @@
 package com.example.shoppingmall.user;
 
 import jakarta.persistence.EntityManager;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ public class UserRepository {
 
     private Map<String, User> userTable = new HashMap<>();
 
-    @Transactional
+
     public void save(User user) {
         entityManager.persist(user);
 
@@ -43,8 +44,11 @@ public class UserRepository {
     }
 
     public User findByUserId(String userId) {
-//        return userTable.get(userId);
-        return entityManager.find(User.class, userId);
+        String jpql = "SELECT m FROM User As m WHERE m.userId = :userId";
+
+        return entityManager.createQuery(jpql, User.class)
+                .setParameter("userId", userId)
+                .getSingleResult();
     }
 
     public User findById(int id) {

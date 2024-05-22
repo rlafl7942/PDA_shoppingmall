@@ -2,16 +2,20 @@ package com.example.shoppingmall.user;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
 public class UserService {
     UserRepository userRepository;
 
+    @Transactional
     public String join(User user) {
         userRepository.save(user);
 
-        return "";
+        return userRepository
+                .findByUserId(user.getUserId())
+                .getUserId();
     }
 
     public String check(String userId) {
