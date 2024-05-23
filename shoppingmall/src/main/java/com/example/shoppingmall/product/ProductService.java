@@ -2,6 +2,7 @@ package com.example.shoppingmall.product;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,14 @@ import java.util.List;
 @AllArgsConstructor // 필드로 생성자 코드 구현
 public class ProductService {
     ProductRepository productRepository;
+    ProductJPARepository productJPARepository;
 
-    public Product registerProduct(Product product) {
-        return productRepository.save(product);
+    @Transactional
+    public int registerProduct(Product product) {
+        productJPARepository.save(product);
+        return productJPARepository.findById(product.getId())
+                .map(Product::getId)
+                .orElseThrow(() -> new RuntimeException("Product Not Found" + product.getId()));
     }
 
     public Product findProduct(int id) {
