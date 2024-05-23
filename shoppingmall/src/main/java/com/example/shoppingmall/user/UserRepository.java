@@ -36,13 +36,6 @@ public class UserRepository {
 //        return savedUser.getUserId();
     }
 
-    public String check(String userId) {
-        User savedUser = userTable.get(userId);
-        if (savedUser == null)
-            return "failed";
-        return "ok";
-    }
-
     public User findByUserId(String userId) {
         String jpql = "SELECT m FROM User As m WHERE m.userId = :userId";
 
