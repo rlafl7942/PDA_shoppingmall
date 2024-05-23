@@ -1,11 +1,14 @@
 package com.example.shoppingmall.product;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.shoppingmall.utils.ApiUtils.error;
 
 @Service
 @AllArgsConstructor // 필드로 생성자 코드 구현
@@ -21,17 +24,22 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Product Not Found" + product.getId()));
     }
 
+    @Transactional
     public Product findProduct(int id) {
-        return productRepository.findProduct(id);
+        return productJPARepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product Not Found"+id));
+        // Todo error 처리 다시 해야 할 것 같음 ..
     }
 
-    public List<Product> findProducts(int limit, int currentPage) {
-        return productRepository.findProducts(limit, currentPage);
+    @Transactional
+    public List<Product> findProducts() {
+        return productJPARepository.findAll();
     }
 
-    public List<Product> findProducts(int limit, int currentPage,int categoryId) {
-        return productRepository.findProducts(limit, currentPage, categoryId);
-    }
+//    @Transactional
+//    public List<Product> findProducts(int limit, int currentPage,int categoryId) {
+//        return productJPARepository.findByCategoryId(limit, currentPage, categoryId);
+//    }
 
     public void deleteProduct(int id) {
         productRepository.deleteProduct(id);

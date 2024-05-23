@@ -35,31 +35,27 @@ public class ProductController {
 
     // 상품 개별 조회
     @GetMapping("/products/{id}")
-    public ApiUtils.ApiResult<Product> findProduct(@PathVariable(value = "id") int id) {
+    public ApiUtils.ApiResult<Product> findProduct(@Valid @PathVariable(value = "id") int id) {
         Product resultProduct = productService.findProduct(id);
-        if (resultProduct == null)
-            System.out.println("hello");
-//            return error("Not Found", HttpStatus.NOT_FOUND);
         return success(resultProduct);
     }
 
     // 상품 전체 조회
+//    @Valid @RequestParam (value = "limit", required = false) int limit,
+//    @RequestParam(value = "currentPage", required = false) int currentPage,
+//    @RequestParam(value = "categoryId", required = false) Integer categoryId
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> findProducts(@RequestParam ("limit") int limit,
-                                                      @RequestParam("currentPage") int currentPage,
-                                                      @RequestParam(value = "categoryId", required = false) Integer categoryId) {
+    public ApiUtils.ApiResult<List<Product>> findProducts() {
 
-        log.info("limit = {}", limit);
-        log.info("currentPage = {}", currentPage);
-        log.info("categoryId = {}", categoryId);
+        List<Product> products;
+        products = productService.findProducts();
+//        if (categoryId == null) {
+//            products = productService.findProducts(limit, currentPage);
+//        } else {
+//            products = productService.findProducts(limit, currentPage, categoryId);
+//        }
 
-        if (categoryId == null) {
-            List<Product> products = productService.findProducts(limit, currentPage);
-            return new ResponseEntity<>(products, HttpStatus.OK);
-        } else {
-            List<Product> products = productService.findProducts(limit, currentPage, categoryId);
-            return new ResponseEntity<>(products, HttpStatus.OK);
-        }
+        return success(products);
     }
 
     @DeleteMapping("/products/{id}")
